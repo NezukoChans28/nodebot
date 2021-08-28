@@ -25,6 +25,7 @@ Tinggal Scan QR Code Pake Hp Yang Bua Jalanin Bot
 ## Information
 - Bot Ini Dibuat Semirip Mungkin Dengan Repository [imageToSticker](https://github.com/YogaSakti/imageToSticker)
 - Bot Ini Akan Terus Di-update Hingga Fitur-fiturnya Banyak
+- Ubah apiKey XTeam Di [Disini](https://github.com/NezukoChans28/nodebot/), Belum Punya apiKey XTeam? Beli [Disini](https://api.xteam.xyz)
 - Jika Ada Yang Ingin Ditanyakan, Langsung Saja Chat [Saya](https://wa.me/6285745351659)
 
 ## Fitur
