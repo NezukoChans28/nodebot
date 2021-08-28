@@ -15,7 +15,7 @@ Aplikasi WhatsApp
 ## Install
 ```bash
 apt update && apt upgrade
-apt install nodejs git ffmpeg
+apt install nodejs git ffmpeg libwebp
 git clone https://github.com/NezukoChans28/nodebot
 npm install
 node index.js
