@@ -22,7 +22,7 @@ module.exports = msgHandler = async (WAConnection, MessageType, Mimetype, msg, c
     let isGroupMsg = from.includes("@g.us")
     let groupData = isGroupMsg ? await client.groupMetadata(from) : ""
     let getGroupAdmin = isGroupMsg ? groupData.participants.filter(x => x.isAdmin === true) : ""
-    let groupAdmin = getGroupAdmin.map(x => x.jid)
+    let groupAdmin = isGroupMsg ? getGroupAdmin.map(x => x.jid) : ""
     let sender = isGroupMsg ? m.participant : from 
     let pushname = await client.contacts[sender].notify
     let time = moment(msg.t * 1000).format('HH:mm:ss')
