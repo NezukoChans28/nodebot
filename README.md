@@ -25,13 +25,15 @@ Tinggal Scan QR Code Pake Hp Yang Bua Jalanin Bot
 ## Information
 - Bot Ini Dibuat Semirip Mungkin Dengan Repository [imageToSticker](https://github.com/YogaSakti/imageToSticker)
 - Bot Ini Akan Terus Di-update Hingga Fitur-fiturnya Banyak
-- Jika Menemukan Error, Langsung Saja Chat [Saya](https://wa.me/6285745351659)
+- Jika Ada Yang Ingin Ditanyakan, Langsung Saja Chat [Saya](https://wa.me/6285745351659)
 
 ## Fitur
 Fitur Utama
 | Fitur | Status |
 | :---: | :----: |
 | Sticker |✔️|
+| Instagram Dl |✔️|
+| Tiktok Dl |✔️|
 
 Fitur Group
 | Fitur | Status |
