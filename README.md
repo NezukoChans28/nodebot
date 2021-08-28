@@ -38,8 +38,8 @@ Fitur Utama
 Fitur Group
 | Fitur | Status |
 | :---: | :-----: |
-| Add |✔️|
-| Kick |✔️|
+| Add |❌|
+| Kick |❌|
 | Promote |✔️|
 | Demote |✔️|
 
