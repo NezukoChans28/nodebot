@@ -13,6 +13,7 @@ module.exports = msgHandler = async (WAConnection, MessageType, Mimetype, msg, c
     if (!msg.messages) return
     m = msg.messages.all()[0]
     if (!m.message) return 
+    if (m.key && m.key.remoteJid == "status@broadcast") return
     if (m.key.fromMe) return
         
     let prefix = "#"
