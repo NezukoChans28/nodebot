@@ -13,7 +13,6 @@ module.exports = msgHandler = async (WAConnection, MessageType, Mimetype, msg, c
     if (!msg.messages) return
     m = msg.messages.all()[0]
     if (!m.message) return 
-    if (m.key && m.key.remoteJid == "status@broadcast") return
     if (m.key.fromMe) return
         
     let prefix = "#"
@@ -45,6 +44,7 @@ module.exports = msgHandler = async (WAConnection, MessageType, Mimetype, msg, c
     if (isCmd && isGroupMsg) console.log(chalk.yellow("[EXEC] ") + time + chalk.green(" " + prefix + command) + " FROM " + chalk.green(pushname) + " IN " + chalk.green(groupData.subject))
     
     let mess = {
+      wait: "*[WAIT]* Silahkan Tunggu!",
       err: "*[ERROR]* Silahkan Lapor Admin!",
       grp: {
         notGrp: "Fitur Ini Khusus Group!",
@@ -60,24 +60,28 @@ module.exports = msgHandler = async (WAConnection, MessageType, Mimetype, msg, c
     // ALWAYS ONLINE
     client.updatePresence(from, "available")
     
+    //return console.log(m.message.extendedTextMessage.contextInfo)
+    
     switch (command) {
       case "help":
       case "menu":
         return client.reply(from, help.help(sender, prefix), id)
         break;
         
-      // FITUR UTAMA
+      // FITUR UTAMA 
+      case "stiker": 
       case "sticker": {
         if (isMediaMsg || isQuotedImage || isQuotedVideo) {
           let encmedia = isQuotedImage ? JSON.parse(JSON.stringify(m).replace("quotedM", "m")).message.extendedTextMessage.contextInfo : m 
-          return client.sendSticker(from, encmedia, id)
+          return client.sendSticker(from, encmedia, "StickerBy", "BOTZ", id)
         }
       }
-      break 
+      break
       case "ig": 
       case "instagram": {
         try {
-        if (args.length === 0) return client.sendMessage(from, "Masukkan Url Instagram!\n\nContoh: *" + prefix + "instagram* https://www.instagram.com/p/CTBia0mhRhu/?utm_medium=copy_link", MessageType.text, { quoted: m, detectLinks: false })
+        if (args.length === 0) return client.reply(from, "Masukkan Url Instagram!\n\nContoh: *" + prefix + "instagram* https://www.instagram.com/p/CTBia0mhRhu/?utm_medium=copy_link", id)
+        client.reply(from, mess.wait, id)
         let { data } = await axios.get("https://api.xteam.xyz/dl/ig?url=" + args[0] + "&APIKEY=" + settings.apiXteam + "")
         let { name, username, likes, caption } = data.result
         let captions = `Name : *${name}*\nUsername : *${username}*\nLikes : *${likes}*\nCaption :\n${caption}`
@@ -85,29 +89,60 @@ module.exports = msgHandler = async (WAConnection, MessageType, Mimetype, msg, c
           if (data.result.data[i].type == "image") {
             await client.sendImage(from, { url: data.result.data[i].data }, captions, id)
           } else {
-            await client.sendMessage(from, { url : data.result.data[i].data}, MessageType.video, { quoted: m, caption: captions, mimetype: Mimetype.mp4})
+            await client.sendVieo(from, { url : data.result.data[i].data}, captions, id)
           }
         }
       } catch (e) {
         console.log(e)
-        client.sendMessage(from, mess.err, MessageType.text, { quoted: m })
+        client.reply(from, mess.err, id)
       }
     }
       break 
       case "tik": 
       case "tiktok": {
         try {
-        if (args.length === 0) return client.sendMessage(from, "Masukkan Url Tiktok!\n\nContoh : *" + prefix + "tiktok* https://vt.tiktok.com/ZSJc2PkTM/", MessageType.text, { quoted: m, detectLinks: true })
+        if (args.length === 0) return client.reply(from, "Masukkan Url Tiktok!\n\nContoh : *" + prefix + "tiktok* https://vt.tiktok.com/ZSJc2PkTM/", id)
+        client.reply(from, mess.wait, id)
         let { data } = await axios.get("https://api.xteam.xyz/dl/tiktok?url=" + args[0] + "&APIKEY=" + settings.apiXteam + "")
         let { server_1 } = data 
         let captions = `Nickname : *${data.info[0].authorMeta.nickName}*\nUsername : *${data.info[0].authorMeta.name}*\nCaption :\n${data.info[0].text}`
-        await client.sendMessage(from, { url : server_1 }, MessageType.video, { quoted: m, caption: captions, mimetype: Mimetype.mp4 })
+        await client.sendVideo(from, { url : server_1 }, captions, id)
       } catch (e) {
         console.log(e)
-        client.sendMessage(from, mess.err, MessageType.text, { quoted: m })
+        client.reply(from, mess.err, id, { quoted: m })
       }
     }
       break 
+      case "ytmp3": {
+        try {
+        if (args.length === 0) return client.reply(from, "Masukkan Url YouTube\n\nContoh : *" + prefix + "ytmp3* https://youtu.be/7zhBmglx6nY", id)
+        client.reply(from, mess.wait, id)
+        let { data } = await axios.get("https://youtube-media-downloader.shellyschan.repl.co/?url=" + args[0])
+        let { judul, deskripsi, thumbnail, audio } = data 
+        let captions = `Judul : *${judul}*\nDeskripsi : *${deskripsi}*`
+        await client.sendImage(from, { url : thumbnail + ".jpeg" }, captions, id)
+        await client.sendAudio(from, { url : audio }, judul + ".mp3", id)
+      } catch (e) {
+        console.log(e)
+        client.reply(from, mess.err, id)
+      }
+    }
+      break 
+      case "ytmp4": {
+        try {
+        if (args.length === 0) return client.reply(from, "Masukkan Url YouTube\n\nContoh : *" + prefix + "ytmp3* https://youtu.be/7zhBmglx6nY", id)
+        client.reply(from, mess.wait, id)
+        let { data } = await axios.get("https://youtube-media-downloader.shellyschan.repl.co/?url=" + args[0])
+        let { judul, deskripsi, thumbnail, video } = data 
+        let captions = `Judul : *${judul}*\nDeskripsi : *${deskripsi}*`
+        await client.sendImage(from, { url : thumbnail + ".jpeg" }, captions, id)
+        await client.sendVideo(from, { url : video }, null, id)
+      } catch (e) {
+        console.log(e)
+        client.reply(from, mess.err, id)
+      }
+    }
+      break
       
       // FITUR GROUP 
       /*case "add": {
@@ -119,7 +154,7 @@ module.exports = msgHandler = async (WAConnection, MessageType, Mimetype, msg, c
         return client.groupAdd(from, [q + "@s.whatsapp.net"])
       } catch (e) {
         console.log(e)
-        client.sendMessage(from, mess.err, MessageType.text, { quoted: m })
+        client.reply(from, mess.err, id, { quoted: m })
       }
     }
       break 
@@ -132,7 +167,7 @@ module.exports = msgHandler = async (WAConnection, MessageType, Mimetype, msg, c
         return client.groupRemove(from, [q + "@s.whatsapp.net"])
       } catch (e) {
         console.log(e)
-        client.sendMessage(from, mess.err, MessageType.text, { quoted: m })
+        client.reply(from, mess.err, id, { quoted: m })
       }
     }
     break 
@@ -147,7 +182,7 @@ module.exports = msgHandler = async (WAConnection, MessageType, Mimetype, msg, c
         return client.groupMakeAdmin(from, m.message.extendedTextMessage.contextInfo.mentionedJid)
       } catch (e) {
         console.log(e)
-        client.sendMessage(from, mess.err, MessageType.text, { quoted: m })
+        client.reply(from, mess.err, id)
       }
     }
     break 
@@ -161,7 +196,7 @@ module.exports = msgHandler = async (WAConnection, MessageType, Mimetype, msg, c
         return client.groupDemoteAdmin(from, m.message.extendedTextMessage.contextInfo.mentionedJid)
       } catch (e) {
         console.log(e)
-        client.sendMessage(from, mess.err, MessageType.text, { quoted: m })
+        client.reply(from, mess.err, id)
       }
     } 
     break
