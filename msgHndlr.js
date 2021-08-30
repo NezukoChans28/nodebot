@@ -130,7 +130,7 @@ module.exports = msgHandler = async (WAConnection, MessageType, Mimetype, msg, c
       break 
       case "ytmp4": {
         try {
-        if (args.length === 0) return client.reply(from, "Masukkan Url YouTube\n\nContoh : *" + prefix + "ytmp3* https://youtu.be/7zhBmglx6nY", id)
+        if (args.length === 0) return client.reply(from, "Masukkan Url YouTube\n\nContoh : *" + prefix + "ytmp4* https://youtu.be/7zhBmglx6nY", id)
         client.reply(from, mess.wait, id)
         let { data } = await axios.get("https://youtube-media-downloader.shellyschan.repl.co/?url=" + args[0])
         let { judul, deskripsi, thumbnail, video } = data 
