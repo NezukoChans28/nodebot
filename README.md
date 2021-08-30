@@ -36,6 +36,7 @@ Fitur Utama
 | Sticker |✔️|
 | Instagram Dl |✔️|
 | Tiktok Dl |✔️|
+| YouTube Downloader |✔️|
 
 Fitur Group
 | Fitur | Status |
