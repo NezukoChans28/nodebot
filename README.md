@@ -49,3 +49,4 @@ Fitur Group
 - [Baileys](https://github.com/@adiwajshing/baileys)
 - [imageToSticker](https://github.com/YogaSakti/imageToSticker)
 - [termux-wabot](https://github.com/MhankBarBar/termux-wabot)
+- [wabot-aq](https://github.com/Nurutomo/wabot-aq)
