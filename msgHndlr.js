@@ -71,8 +71,11 @@ module.exports = msgHandler = async (WAConnection, MessageType, Mimetype, msg, c
       // FITUR UTAMA 
       case "stiker": 
       case "sticker": {
-        if (isMediaMsg || isQuotedImage || isQuotedVideo) {
+        if (isMediaMsg || isQuotedImage) {
           let encmedia = isQuotedImage ? JSON.parse(JSON.stringify(m).replace("quotedM", "m")).message.extendedTextMessage.contextInfo : m 
+          return client.sendSticker(from, encmedia, "StickerBy", "BOTZ", id)
+        } else {
+          let encmedia = isQuotedVideo ? JSON.parse(JSON.stringify(m).replace("quotedM", "m")).message.extendedTextMessage.contextInfo : m 
           return client.sendSticker(from, encmedia, "StickerBy", "BOTZ", id)
         }
       }
