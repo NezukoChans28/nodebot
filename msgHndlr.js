@@ -1,7 +1,6 @@
 const axios = require("axios")
-const fs = require("fs")
-const ffmpeg = require("fluent-ffmpeg")
 const chalk = require("chalk")
+const fs = require("fs")
 const moment = require("moment")
 
 const help = require("./lib/help.js")
@@ -13,6 +12,7 @@ module.exports = msgHandler = async (WAConnection, MessageType, Mimetype, msg, c
     if (!msg.messages) return
     m = msg.messages.all()[0]
     if (!m.message) return 
+    if (m.key && m.key.remoteJid == "status@broadcast") return
     if (m.key.fromMe) return
         
     let prefix = "#"
@@ -61,13 +61,13 @@ module.exports = msgHandler = async (WAConnection, MessageType, Mimetype, msg, c
     client.updatePresence(from, "available")
     
     //return console.log(m.message.extendedTextMessage.contextInfo)
-    
+ 
     switch (command) {
       case "help":
       case "menu":
         return client.reply(from, help.help(sender, prefix), id)
         break;
-        
+      
       // FITUR UTAMA 
       case "stiker": 
       case "sticker": {
@@ -123,7 +123,7 @@ module.exports = msgHandler = async (WAConnection, MessageType, Mimetype, msg, c
         let { data } = await axios.get("https://youtube-media-downloader.shellyschan.repl.co/?url=" + args[0])
         let { judul, deskripsi, thumbnail, audio } = data 
         let captions = `Judul : *${judul}*\nDeskripsi : *${deskripsi}*`
-        await client.sendImage(from, { url : thumbnail + ".jpeg" }, captions, id)
+        await client.sendImage(from, { url : thumbnail + ".jpg" }, captions, id)
         await client.sendAudio(from, { url : audio }, judul + ".mp3", id)
       } catch (e) {
         console.log(e)
@@ -140,6 +140,35 @@ module.exports = msgHandler = async (WAConnection, MessageType, Mimetype, msg, c
         let captions = `Judul : *${judul}*\nDeskripsi : *${deskripsi}*`
         await client.sendImage(from, { url : thumbnail + ".jpeg" }, captions, id)
         await client.sendVideo(from, { url : video }, null, id)
+      } catch (e) {
+        console.log(e)
+        client.reply(from, mess.err, id)
+      }
+    }
+      break
+      case "facebook": 
+      case "fb": {
+        try {
+        if (args.length === 0) return client.reply(from, "Masukkan Url Facebook\n\nContoh : *" + prefix + "fb* https://www.facebook.com/botikaonline/videos/837084093818982", id)
+        client.reply(from, mess.wait, id)
+        let { data } = await axios.get("https://api.xteam.xyz/dl/fbv2?url=" + args[0] + "&APIKEY=" + settings.apiXteam + "")
+        let { hd } = data.result
+        let captions = `Judul : *${data.result.meta.title}*`
+        await client.sendVideo(from, { url : hd.url }, captions, id)
+      } catch (e) {
+        console.log(e)
+        client.reply(from, mess.err, id)
+      }
+    }
+      break 
+      case "igstalk":
+      case "igprofile": {
+        try {
+        if (args.length === 0) return client.reply(from, "Masukkan Username Instagram\n\nContoh : *" + prefix + "igprofile* nezuko.chan.12", id)
+        let { data } = await axios.get("https://api.xteam.xyz/dl/igstalk?nama=" + args[0] + "&APIKEY=" + settings.apiXteam + "")
+        let { username, full_name, follower_count, following_count, biography, hd_profile_pic_url_info } = data.result.user
+        let captions = `Username : *${username}*\nFull Name : *${full_name}*\nFollower : *${follower_count}*\nFollowing : *${following_count}*\nBio : *${biography}*`
+        await client.sendImage(from, { url : hd_profile_pic_url_info.url }, captions, id)
       } catch (e) {
         console.log(e)
         client.reply(from, mess.err, id)
@@ -202,8 +231,33 @@ module.exports = msgHandler = async (WAConnection, MessageType, Mimetype, msg, c
         client.reply(from, mess.err, id)
       }
     } 
+    break 
+    case "settname" : {
+      try {
+        if (!isGroupMsg) return client.reply(from, mess.grp.notGrp, id)
+        if (!isAdminGroup) return client.reply(from, mess.grp.notAdm, id)
+        if (!isAdminBotGroup) return client.reply(from, mess.grp.notBotAdm, id)
+        if (args.length === 0) return client.reply(from, "Masukkan Nama Group Yang baru!\n\nContoh : *" + prefix + "settname* Nama Group Yang Baru", id)
+        return client.groupUpdateSubject(from, q)
+      } catch (e) {
+        console.log(e)
+        client.reply(from, mess.err, id)
+      }
+    }
     break
-      
+      case "settdesc": {
+      try {
+        if (!isGroupMsg) return client.reply(from, mess.grp.notGrp, id)
+        if (!isAdminGroup) return client.reply(from, mess.grp.notAdm, id)
+        if (!isAdminBotGroup) return client.reply(from, mess.grp.notBotAdm, id)
+        if (args.length === 0) return client.reply(from, "Masukkan Deskripsi Group Yang baru!\n\nContoh : *" + prefix + "settdesc* Deskripsi Group Yang Baru", id)
+        return client.groupUpdateDescription(from, q)
+      } catch (error) {
+        console.log(e)
+        client.reply(from, mess.err, id)
+      }
+    }
+    break      
       default:
         console.log(chalk.redBright("[ERROR] UNREGISTERED COMMAND FROM " + pushname))
     }
