@@ -14,7 +14,7 @@ module.exports = msgHandler = async (WAConnection, MessageType, Mimetype, msg, c
     if (!m.message) return 
     if (m.key && m.key.remoteJid == "status@broadcast") return
     if (m.key.fromMe) return
-        
+      
     let prefix = "#"
     let type = Object.keys(m.message)[0]
     let from = m.key.remoteJid 
@@ -24,7 +24,7 @@ module.exports = msgHandler = async (WAConnection, MessageType, Mimetype, msg, c
     let getGroupAdmin = isGroupMsg ? groupData.participants.filter(x => x.isAdmin === true) : ""
     let groupAdmin = isGroupMsg ? getGroupAdmin.map(x => x.jid) : ""
     let sender = isGroupMsg ? m.participant : from 
-    let pushname = await client.contacts[sender].notify
+    let pushname = sender.split("@")[0]
     let time = moment(msg.t * 1000).format('HH:mm:ss')
     let quotedMsg = JSON.stringify(m.message)
     let body = (type === "conversation") && m.message.conversation.startsWith(prefix) ? m.message.conversation : (type === "imageMessage") && m.message.imageMessage.caption.startsWith(prefix) ? m.message.imageMessage.caption : (type === "videoMessage") && m.message.videoMessage.caption.startsWith(prefix) ? m.message.videoMessage.caption : (type === "extendedTextMessage") && m.message.extendedTextMessage.text.startsWith(prefix) ? m.message.extendedTextMessage.text : ""
@@ -60,13 +60,19 @@ module.exports = msgHandler = async (WAConnection, MessageType, Mimetype, msg, c
     // ALWAYS ONLINE
     client.updatePresence(from, "available")
     
-    //return console.log(m.message.extendedTextMessage.contextInfo)
+    //return console.log(names)
  
     switch (command) {
       case "help":
       case "menu":
         return client.reply(from, help.help(sender, prefix), id)
         break;
+      case "owner":
+      case "creator":
+      case "admin": {
+        return client.reply(from, `Terimakasih Telah Menggunakan Bot Ini\nAdmin BOT\n@${settings.ownerNumber[0].split("@")[0]}`, id)
+      }
+      break
       
       // FITUR UTAMA 
       case "stiker": 
@@ -175,7 +181,16 @@ module.exports = msgHandler = async (WAConnection, MessageType, Mimetype, msg, c
       }
     }
       break
-      
+      case "nulis": {
+        try {
+        if (args.length === 0) return client.reply(from, "Masukkan sebuah text\n\nContoh : *" + prefix + "nulis* NezukoChans", id) 
+        return client.sendImage(from, { url : "https://api.xteam.xyz/magernulis2?text=" + q + "&APIKEY=" + settings.apiXteam + "" }, "Done Kak @" + sender.split("@")[0], id)
+      } catch (e) {
+        console.log(e)
+        client.reply(from, mess.err, id)
+      }
+    }
+      break
       // FITUR GROUP 
       /*case "add": {
         try {
@@ -252,7 +267,7 @@ module.exports = msgHandler = async (WAConnection, MessageType, Mimetype, msg, c
         if (!isAdminBotGroup) return client.reply(from, mess.grp.notBotAdm, id)
         if (args.length === 0) return client.reply(from, "Masukkan Deskripsi Group Yang baru!\n\nContoh : *" + prefix + "settdesc* Deskripsi Group Yang Baru", id)
         return client.groupUpdateDescription(from, q)
-      } catch (error) {
+      } catch (e) {
         console.log(e)
         client.reply(from, mess.err, id)
       }
