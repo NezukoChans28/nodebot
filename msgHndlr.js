@@ -98,7 +98,7 @@ module.exports = msgHandler = async (WAConnection, MessageType, Mimetype, msg, c
           if (data.result.data[i].type == "image") {
             await client.sendImage(from, { url: data.result.data[i].data }, captions, id)
           } else {
-            await client.sendVieo(from, { url : data.result.data[i].data}, captions, id)
+            await client.sendVideo(from, { url : data.result.data[i].data}, captions, id)
           }
         }
       } catch (e) {
