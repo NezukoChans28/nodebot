@@ -30,13 +30,30 @@ Tinggal Scan QR Code Pake Hp Yang Bua Jalanin Bot
 - Jika Ada Yang Ingin Ditanyakan, Langsung Saja Chat [Saya](https://wa.me/6285745351659)
 
 ## Fitur
-Fitur Utama
+Fitur Maker
 | Fitur | Status |
 | :---: | :----: |
 | Sticker |✔️|
-| Instagram Dl |✔️|
-| Tiktok Dl |✔️|
+| Nulis | ✔️ |
+| Neon | ✔️ |
+| Blackpink | ✔️ |
+
+Fitur Downloader
+| Fitur | Status |
+| :---: | :----: |
+| Instagram Downloader |✔️|
+| Tiktok Downloader |✔️|
 | YouTube Downloader |✔️|
+| Facebook Downloader | ✔️ |
+| Play Music | ✔️ |
+
+Fitur Anime
+| Fitur | Status |
+| :---: | :----: |
+| Waifu | ✔️ |
+| Husbu | ✔️ |
+| Nekonine | ✔️ |
+| Anime Search | ✔️ |
 
 Fitur Group
 | Fitur | Status |
@@ -45,6 +62,10 @@ Fitur Group
 | Kick |❌|
 | Promote |✔️|
 | Demote |✔️|
+| Settname | ✔️ |
+| Settdesc | ✔️ |
+| Mentionall | ✔️ |
+| Group info | ✔️ |
 
 ## Special Thanks To
 - [Baileys](https://github.com/@adiwajshing/baileys)
