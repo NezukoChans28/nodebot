@@ -17,6 +17,7 @@ Aplikasi WhatsApp
 apt update && apt upgrade
 apt install nodejs git ffmpeg libwebp
 git clone https://github.com/NezukoChans28/nodebot
+cd nodebot
 npm install
 node index.js
 Tinggal Scan QR Code Pake Hp Yang Bua Jalanin Bot
