@@ -255,6 +255,10 @@ module.exports = msgHandler = async (WAConnection, MessageType, Mimetype, msg, c
       }
     }
       break
+      case "shota": {
+        return client.sendImage(from, { url: "https://api.xteam.xyz/randomimage/shota?APIKEY=" + settings.apiXteam }, null, id)
+      }
+      break
       // FITUR GROUP 
       /*case "add": {
         try {
